@@ -68,9 +68,9 @@ def is_word_guessed(secret_word, letters_guessed):
             if count < len(secret_word):
                 continue
             else:
-                return(True)
+                return True
         else:
-            return(False)
+            return False
 
 
 
@@ -88,7 +88,7 @@ def get_guessed_word(secret_word, letters_guessed):
             guessed_word += letter
         else:
             guessed_word += "_ "
-    return(guessed_word)
+    return guessed_word
 
 
 
@@ -106,7 +106,7 @@ def get_available_letters(letters_guessed):
             available_letters += letter
         else:
             continue
-    return(available_letters)
+    return available_letters
 
 
 
@@ -140,7 +140,7 @@ def hangman(secret_word):
     print("Welcome to the game Hangman!")
     print("I am thinking of a word that is", len(secret_word), "letters long.")
 
-
+    vowels = ['a','e','i','o','u']
     remaining_guess = 6
     letters_guessed = []
     warnings = 3
@@ -173,7 +173,10 @@ def hangman(secret_word):
             elif letter.lower() not in secret_word:
                 print("Oops! That letter is not in my word:", get_guessed_word(secret_word, letters_guessed))
                 letters_guessed += letter.lower()
-                remaining_guess -= 1
+                if letter.lower() in vowels:
+                    remaining_guess -= 2
+                else:
+                    remaining_guess -= 1
                 break
             else:
                 letter = letter.lower()
@@ -222,11 +225,18 @@ def match_with_gaps(my_word, other_word):
             # print(blank_char)
             # print(tested)
             if tested == list(my_word_ns):
+                bool = []
                 for char in blank_char:
                     if char in tested:
-                        return False
+                        # print(char)
+                        bool.append(False)
                     else:
-                        return True
+                        # print(char)
+                        bool.append(True)
+                if False in bool:
+                    return False
+                else:
+                    return True
             else:
                 if my_word_ns[i] == other_word[i]:
                     tested += my_word_ns[i]
@@ -234,9 +244,8 @@ def match_with_gaps(my_word, other_word):
                     tested += my_word_ns[i]
                     blank_char += other_word[i]
                 else:
-                    # print(tested)
                     return False
-                    break # PyCharm said this was unreachable but maybe it was wrong. Test with "ab_ le" and "apple".
+                    break
     else:
         return False
 
@@ -297,6 +306,7 @@ def hangman_with_hints(secret_word):
     print("Welcome to the game Hangman!")
     print("I am thinking of a word that is", len(secret_word), "letters long.")
 
+    vowels = ['a', 'e', 'i', 'o', 'u']
     remaining_guess = 6
     letters_guessed = []
     warnings = 3
@@ -331,7 +341,10 @@ def hangman_with_hints(secret_word):
             elif letter.lower() not in secret_word:
                 print("Oops! That letter is not in my word:", get_guessed_word(secret_word, letters_guessed))
                 letters_guessed += letter.lower()
-                remaining_guess -= 1
+                if letter.lower() in vowels:
+                    remaining_guess -= 2
+                else:
+                    remaining_guess -= 1
                 break
             else:
                 letter = letter.lower()
@@ -375,6 +388,5 @@ if __name__ == "__main__":
 
     # secret_word = "tendonitis"
     # hangman(secret_word)
-    
     secret_word = choose_word(wordlist)
     hangman_with_hints(secret_word)
